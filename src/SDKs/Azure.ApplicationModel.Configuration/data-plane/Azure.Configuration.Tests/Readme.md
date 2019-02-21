@@ -14,3 +14,6 @@ Run:
     3. Double check your active subscription value by doing `az account show`
 5. From the output, get the first connection string and add it as `AZ_CONFIG_CONNECTION` environment variable's value.
 6. Make sure to restart VS or the environment where the tests are running.
+
+
+![Tracking](https://trackingexperiment.azurewebsites.net/api/TrackRequest?path=azure-sdk-for-net%2F%2Fsrc%2FSDKs%2FAzure.ApplicationModel.Configuration%2Fdata-plane%2FAzure.Configuration.Tests%2FReadme.md "Tracking")

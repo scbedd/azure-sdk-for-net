@@ -15,3 +15,5 @@
 ## Build Instructions:
 
 To build this project, please follow the instructions [here](https://github.com/Azure/azure-sdk-for-net/blob/psSdkJson6/README.md).
+
+![Tracking](https://trackingexperiment.azurewebsites.net/api/TrackRequest?path=azure-sdk-for-net%2F%2Fsrc%2FSDKs%2FCognitiveServices%2FdataPlane%2FLanguage%2FTextAnalytics%2FTextAnalytics%2FReadme.md "Tracking")

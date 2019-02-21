@@ -168,3 +168,6 @@ Much of the SDK code is generated from metadata specs about the REST APIs. Do no
   - File an issue describing the problem,
   - Refer to the the [AutoRest project](https://github.com/azure/autorest) to view and modify the generator, or
   - Add additional methods, properties, and overloads to the SDK by adding classes in the 'Customizations' folder of a project
+
+
+![Tracking](https://trackingexperiment.azurewebsites.net/api/TrackRequest?path=azure-sdk-for-net%2F%2FREADME.md "Tracking")

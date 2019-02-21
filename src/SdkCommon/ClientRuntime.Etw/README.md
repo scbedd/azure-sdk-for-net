@@ -9,3 +9,6 @@ Exposes AutoRest Generated Libraries events via ETW (Event Tracing for Windows).
 ServiceClientInterceptor.AddTracingInterceptor(new EtwTracingInterceptor());
 ```
 2. Use a tool such as [PerfView](http://www.microsoft.com/en-us/download/details.aspx?id=28567) to capture events under the ```Microsoft.Rest``` provider.
+
+
+![Tracking](https://trackingexperiment.azurewebsites.net/api/TrackRequest?path=azure-sdk-for-net%2F%2Fsrc%2FSdkCommon%2FClientRuntime.Etw%2FREADME.md "Tracking")

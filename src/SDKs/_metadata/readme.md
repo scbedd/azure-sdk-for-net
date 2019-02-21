@@ -9,3 +9,6 @@ Historically, this information was only stored in `generate.cmd` files per servi
 
 The metadata file addresses these problems since it is auto-generated when generating the SDK. No matter whether the `generate.cmd` of an SDK uses the latest or a specific version of AutoRest or whether it uses a fork/branch of the specs repository: The metadata will contain the information necessary to reproduce these steps.
 The `generate.cmd` has to be updated only if the *strategy* of code generation changes, but not with every regeneration due to commit IDs.
+
+
+![Tracking](https://trackingexperiment.azurewebsites.net/api/TrackRequest?path=azure-sdk-for-net%2F%2Fsrc%2FSDKs%2F_metadata%2Freadme.md "Tracking")

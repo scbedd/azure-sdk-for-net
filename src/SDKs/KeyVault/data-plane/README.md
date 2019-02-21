@@ -79,3 +79,5 @@ Code samples for the Azure Key Vault SDK are available on [Azure Code Samples](h
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information 
 see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) 
 with any additional questions or comments.
+
+![Tracking](https://trackingexperiment.azurewebsites.net/api/TrackRequest?path=azure-sdk-for-net%2F%2Fsrc%2FSDKs%2FKeyVault%2Fdata-plane%2FREADME.md "Tracking")

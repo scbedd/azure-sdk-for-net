@@ -39,3 +39,6 @@ public async Task HelloWorld()
 1. [How to access diagnostic logs](https://github.com/Azure/azure-sdk-for-net-lab/blob/master/Configuration/Azure.Configuration.Test/samples/Sample4_Logging.cs)
 2. [How to configure retry policy](https://github.com/Azure/azure-sdk-for-net-lab/blob/master/Configuration/Azure.Configuration.Test/samples/Sample6_ConfiguringRetries.cs)
 3. [How to configure service requests](https://github.com/Azure/azure-sdk-for-net-lab/blob/master/Configuration/Azure.Configuration.Test/samples/Sample7_ConfiguringPipeline.cs)
+
+
+![Tracking](https://trackingexperiment.azurewebsites.net/api/TrackRequest?path=azure-sdk-for-net%2F%2Fsrc%2FSDKs%2FAzure.ApplicationModel.Configuration%2Fdata-plane%2FREADME.md "Tracking")

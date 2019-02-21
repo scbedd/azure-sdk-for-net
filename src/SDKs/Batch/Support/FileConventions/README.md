@@ -134,3 +134,6 @@ then its path within the container is "analysis-309/$TaskLog/analytics.log".
 The purpose behind this structure is to enable clients to readily locate
 outputs based on their kind - for example, "list the main outputs of the job"
 or "list the log files for task analysis-309".
+
+
+![Tracking](https://trackingexperiment.azurewebsites.net/api/TrackRequest?path=azure-sdk-for-net%2F%2Fsrc%2FSDKs%2FBatch%2FSupport%2FFileConventions%2FREADME.md "Tracking")

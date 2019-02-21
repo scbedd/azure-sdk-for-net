@@ -62,3 +62,5 @@ Optional `dotNet` properties:
 |`dotNet.ft`       |an AutoRest flattering parameter|`0`                                                 |`0`                                 |
 |`dotNet.commit`   |a specification commit id       |current commit id                                   |`undefined`                         |
 |`dotNet.autorest` |an AutoRest package             |current AutoRest                                    |`undefined`                         |
+
+![Tracking](https://trackingexperiment.azurewebsites.net/api/TrackRequest?path=azure-sdk-for-net%2F%2Ftools%2Flegacy%2FScriptBackup%2FautogenForSwaggers%2Freadme.md "Tracking")
