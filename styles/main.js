@@ -1,8 +1,17 @@
 // Wait for images to load for proper offsets
 $(window).on('load', function () {
-    setTimeout(() => {  console.log("World!"); }, 2000);
+
     // Compare lowercase hashes
     var hash = window.location.hash.substring(1).toLowerCase();
+
+    $('[id]').click(function()
+    {
+        if ($(this).attr('id').toLowerCase() === window.location.hash.substring(1).toLowerCase())
+        {
+            console.log($(this));
+            $(window).scrollTop($(this).offset().top + 100);
+        }
+    });
 
     // Check IDs
     $('[id]').each(function()
