@@ -1,3 +1,28 @@
+// Wait for images to load for proper offsets
+$(window).load(function() 
+{
+    // Compare lowercase hashes
+    var hash = window.location.hash.substring(1).toLowerCase();
+
+    // Check IDs
+    $('[id]').each(function()
+    {
+        if ($(this).attr('id').toLowerCase() === hash)
+        {
+            $(window).scrollTop($(this).offset().top);
+        }
+    });
+
+    // Check named anchors
+    $('a[name]').each(function()
+    {
+        if ($(this).attr('name').toLowerCase() === hash)
+        {
+            $(window).scrollTop($(this).offset().top);
+        }
+    });
+});
+
 // Use container fluid
 var containers = $(".container");
 containers.removeClass("container");
