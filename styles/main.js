@@ -1,5 +1,6 @@
 // Wait for images to load for proper offsets
-$(document).on('ready', function () {
+$(window).on('load', function () {
+    setTimeout(() => {  console.log("World!"); }, 2000);
     // Compare lowercase hashes
     var hash = window.location.hash.substring(1).toLowerCase();
 
@@ -16,7 +17,6 @@ $(document).on('ready', function () {
     // Check named anchors
     $('a[name]').each(function()
     {
-
         if ($(this).attr('name').toLowerCase() === hash)
         {        
             console.log($(this));
