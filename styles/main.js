@@ -6,20 +6,21 @@ $(window).on('load', function () {
     // Check IDs
     $('[id]').each(function()
     {
-        console.log($(this));
         if ($(this).attr('id').toLowerCase() === hash)
         {
-            $(window).scrollTop($(this).offset().bottom);
+            console.log($(this));
+            $(window).scrollTop($(this).offset().top);
         }
     });
 
     // Check named anchors
     $('a[name]').each(function()
     {
-        console.log($(this));
+
         if ($(this).attr('name').toLowerCase() === hash)
-        {
-            $(window).scrollTop($(this).offset().bottom);
+        {        
+            console.log($(this));
+            $(window).scrollTop($(this).offset().top);
         }
     });
 });
