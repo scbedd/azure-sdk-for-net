@@ -7,6 +7,7 @@ $(window).load(function()
     // Check IDs
     $('[id]').each(function()
     {
+        console.log($(this));
         if ($(this).attr('id').toLowerCase() === hash)
         {
             $(window).scrollTop($(this).offset().top);
@@ -16,6 +17,7 @@ $(window).load(function()
     // Check named anchors
     $('a[name]').each(function()
     {
+        console.log($(this));
         if ($(this).attr('name').toLowerCase() === hash)
         {
             $(window).scrollTop($(this).offset().top);
