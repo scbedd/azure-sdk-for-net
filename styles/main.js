@@ -1,5 +1,5 @@
 // Wait for images to load for proper offsets
-$(window).on('load', function () {
+$('#_content').on('load', function () {
     // Compare lowercase hashes
     var hash = window.location.hash.substring(1).toLowerCase();
 
