@@ -11,6 +11,8 @@ $(window).on('load', function () {
             console.log($(this));
             $(window).scrollTop($(this).offset().top + 100);
         }
+
+        return true;
     });
 
     // Check IDs
