@@ -1,5 +1,5 @@
 // Wait for images to load for proper offsets
-$(window).on('load', function () {
+$(document).on('ready', function () {
     // Compare lowercase hashes
     var hash = window.location.hash.substring(1).toLowerCase();
 
@@ -9,7 +9,7 @@ $(window).on('load', function () {
         if ($(this).attr('id').toLowerCase() === hash)
         {
             console.log($(this));
-            $(window).scrollTop($(this).offset().top);
+            $(window).scrollTop($(this).offset().top + 100);
         }
     });
 
@@ -20,7 +20,7 @@ $(window).on('load', function () {
         if ($(this).attr('name').toLowerCase() === hash)
         {        
             console.log($(this));
-            $(window).scrollTop($(this).offset().top);
+            $(window).scrollTop($(this).offset().top + 100);
         }
     });
 });
