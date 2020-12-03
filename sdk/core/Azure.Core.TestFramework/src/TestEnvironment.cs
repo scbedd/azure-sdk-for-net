@@ -157,7 +157,7 @@ namespace Azure.Core.TestFramework
                     return _credential;
                 }
 
-                if (Mode == RecordedTestMode.Playback)
+                if (Mode == RecordedTestMode.Playback || Mode == RecordedTestMode.RemotePlayback)
                 {
                     _credential = new MockCredential();
                 }

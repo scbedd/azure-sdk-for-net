@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 using System;
+using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Azure.Core.TestFramework;
@@ -11,9 +12,32 @@ namespace Azure.Data.SchemaRegistry.Tests
 {
     public class SchemaRegistryClientLiveTest : RecordedTestBase<SchemaRegistryClientTestEnvironment>
     {
-        public SchemaRegistryClientLiveTest(bool isAsync) : base(isAsync)
+        public SchemaRegistryClientLiveTest(bool isAsync) : base(isAsync, GetMode())
         {
             TestDiagnostics = false;
+        }
+
+        private static RecordedTestMode GetMode()
+        {
+            // !! TODO: Variable recording not handled remotely yet. It's problematic
+            // because the tests expect to read these straight away.
+            var envFile = @"C:\temp\env-schema\.env";
+
+            foreach (var line in File.ReadAllLines(envFile))
+            {
+                var trimmed = line.Trim();
+                if (trimmed.Length == 0 || trimmed[0] == '#')
+                {
+                    continue;
+                }
+
+                var parts = trimmed.Split(new[] { '=' }, 2);
+                var key = parts[0];
+                var value = parts[1];
+                Environment.SetEnvironmentVariable(key, value);
+            }
+
+            return RecordedTestUtilities.GetModeFromEnvironment();
         }
 
         private SchemaRegistryClient CreateClient() =>

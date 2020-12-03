@@ -54,6 +54,9 @@ namespace Azure.Core.TestFramework
                         throw new TestRecordingMismatchException(ex.Message, ex);
                     }
                     break;
+                case RecordedTestMode.RemoteRecord:
+                case RecordedTestMode.RemotePlayback:
+                    break;
             }
         }
 
@@ -72,6 +75,8 @@ namespace Azure.Core.TestFramework
         private RecordSession _previousSession;
 
         private TestRandom _random;
+
+        private Action<bool> _disposeAction;
 
         public TestRandom Random
         {
@@ -191,6 +196,12 @@ namespace Azure.Core.TestFramework
                 _session.Serialize(utf8JsonWriter);
                 utf8JsonWriter.Flush();
             }
+
+            if (_disposeAction != null)
+            {
+                _disposeAction(save);
+                _disposeAction = null;
+            }
         }
 
         public void Dispose()
@@ -200,14 +211,22 @@ namespace Azure.Core.TestFramework
 
         public HttpPipelineTransport CreateTransport(HttpPipelineTransport currentTransport)
         {
-            return Mode switch
+            var transport = Mode switch
             {
                 RecordedTestMode.Live => currentTransport,
                 RecordedTestMode.Record => new RecordTransport(_session, currentTransport, entry => _disableRecording.Value, Random),
-                RecordedTestMode.Playback => new PlaybackTransport(_session, _matcher, _sanitizer, Random,
-                    entry => _disableRecording.Value == EntryRecordModel.RecordWithoutRequestBody),
+                RecordedTestMode.Playback => new PlaybackTransport(_session, _matcher, _sanitizer, Random, entry => _disableRecording.Value == EntryRecordModel.RecordWithoutRequestBody),
+                RecordedTestMode.RemotePlayback => new RemoteRecordTransport(currentTransport, _sessionFile, playback: true),
+                RecordedTestMode.RemoteRecord => new RemoteRecordTransport(currentTransport, _sessionFile, playback: false),
                 _ => throw new ArgumentOutOfRangeException(nameof(Mode), Mode, null),
             };
+
+            if (transport is RemoteRecordTransport remote)
+            {
+                _disposeAction += remote.Stop;
+            }
+
+            return transport;
         }
 
         public string GenerateId()
@@ -315,6 +334,11 @@ namespace Azure.Core.TestFramework
 
             public DisableRecordingScope(TestRecording testRecording, EntryRecordModel entryRecordModel)
             {
+                if (testRecording.Mode == RecordedTestMode.RemotePlayback || testRecording.Mode == RecordedTestMode.RemoteRecord)
+                {
+                    // !! TODO
+                    throw new NotImplementedException();
+                }
                 _testRecording = testRecording;
                 _testRecording._disableRecording.Value = entryRecordModel;
             }

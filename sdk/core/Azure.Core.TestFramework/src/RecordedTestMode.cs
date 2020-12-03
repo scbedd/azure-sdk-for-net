@@ -8,6 +8,9 @@ namespace Azure.Core.TestFramework
         Live,
         Record,
         Playback,
+        RemotePlayback,
+        RemoteRecord,
+
         // Backcompat with Track 1
         None = Live
     }
