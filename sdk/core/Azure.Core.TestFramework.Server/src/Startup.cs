@@ -29,7 +29,6 @@ namespace Azure.Core.TestFramework.Server
         {
             services.AddHttpClient();
             services.AddControllers();
-            
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

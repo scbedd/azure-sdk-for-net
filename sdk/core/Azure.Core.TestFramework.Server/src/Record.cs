@@ -104,7 +104,6 @@ namespace Azure.Core.TestFramework.Server
                 entry.Response.Headers.Add(header.Key, values);
             }
 
-
             Response.Headers.Remove("Transfer-Encoding");
 
             if (entry.Response.Body?.Length > 0)
@@ -114,7 +113,6 @@ namespace Azure.Core.TestFramework.Server
             }
         }
 
-    
         private HttpRequestMessage CreateUpstreamRequest(HttpRequest incomingRequest, byte[] incomingBody)
         {
             var upstreamRequest = new HttpRequestMessage();
