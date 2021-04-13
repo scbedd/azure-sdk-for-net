@@ -1,18 +1,27 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using System;
 using Azure.Communication.Pipeline;
-using Azure.Core;
 using Azure.Core.TestFramework;
 using Azure.Identity;
+using NUnit.Framework;
 
 namespace Azure.Communication.Identity.Tests
 {
     public class CommunicationIdentityClientLiveTestBase : RecordedTestBase<CommunicationIdentityClientTestEnvironment>
     {
         public CommunicationIdentityClientLiveTestBase(bool isAsync) : base(isAsync)
-            => Sanitizer = new CommunicationRecordedTestSanitizer();
+            => Sanitizer = new CommunicationIdentityClientRecordedTestSanitizer();
+
+        [OneTimeSetUp]
+        public void Setup()
+        {
+            if (TestEnvironment.ShouldIgnoreTests)
+            {
+                Assert.Ignore("Identity tests are skipped " +
+                    "because identity package is not included in the TEST_PACKAGES_ENABLED variable");
+            }
+        }
 
         /// <summary>
         /// Creates a <see cref="CommunicationIdentityClient" /> with the connectionstring via environment

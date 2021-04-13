@@ -1,7 +1,20 @@
 # Release History
 
-## 12.7.0-beta.1 (Unreleased)
-- Fixed bug where QueueClient.CanGenerateSasUri and QueueServiceClient.CanGenerateSasUri was not mockable
+## 12.7.0-beta.4 (Unreleased)
+- Fixed bug where clients would sometimes throw a NullReferenceException when calling GenerateSas() with a QueueSasBuilder parameter.
+
+## 12.7.0-beta.3 (2021-04-09)
+- This preview contains bug fixes to improve quality.
+
+## 12.6.1 (2021-03-29)
+- Fixed bug where ClientDiagnostics's DiagnosticListener was leaking resources.
+
+## 12.7.0-beta.2 (2021-03-09)
+- This preview contains bug fixes to improve quality.
+
+## 12.7.0-beta.1 (2021-02-09)
+- Fixed bug where QueueClient.CanGenerateSasUri and QueueServiceClient.CanGenerateSasUri was not mockable.
+- Added MessageDecodingFailed event to QueueClientOptions.
 
 ## 12.6.0 (2021-01-12)
 - Includes all features from 12.6.0-beta.1.

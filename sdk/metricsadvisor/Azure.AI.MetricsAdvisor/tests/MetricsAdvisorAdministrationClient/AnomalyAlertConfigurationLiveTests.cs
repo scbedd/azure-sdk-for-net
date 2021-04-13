@@ -924,14 +924,15 @@ namespace Azure.AI.MetricsAdvisor.Tests
             var configToCreate = new AnomalyAlertConfiguration()
             {
                 Name = configName,
-                MetricAlertConfigurations = { new (DetectionConfigurationId, scope) }
+                MetricAlertConfigurations = { new(DetectionConfigurationId, scope) }
             };
 
             string configId = null;
 
             try
             {
-                configId = await adminClient.CreateAlertConfigurationAsync(configToCreate);
+                AnomalyAlertConfiguration createdConfig = await adminClient.CreateAlertConfigurationAsync(configToCreate);
+                configId = createdConfig.Id;
 
                 Assert.That(configId, Is.Not.Null.And.Not.Empty);
             }

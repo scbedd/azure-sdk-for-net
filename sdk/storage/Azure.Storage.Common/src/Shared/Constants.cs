@@ -24,6 +24,7 @@ namespace Azure.Storage
         /// Gets the default service version to use when building shared access
         /// signatures.
         /// </summary>
+        // TODO https://github.com/Azure/azure-sdk-for-net/issues/19575
         public const string DefaultSasVersion = "2020-06-12";
 
         /// <summary>
@@ -93,6 +94,16 @@ namespace Azure.Storage
 
         public const string CommaString = ",";
         public const char CommaChar = ',';
+
+        public const string ContentTypeApplicationXml = "application/xml";
+        public const string ContentTypeApplicationJson = "application/json";
+
+        public const string ErrorPropertyKey = "error";
+        public const string DetailPropertyKey = "detail";
+        public const string MessagePropertyKey = "message";
+        public const string CodePropertyKey = "code";
+
+        public const string Iso8601Format = "yyyy'-'MM'-'dd'T'HH':'mm':'ssZ";
 
         /// <summary>
         /// Storage Connection String constant values.
@@ -166,6 +177,8 @@ namespace Azure.Storage
             public const string InternalError = "InternalError";
             public const string OperationTimedOut = "OperationTimedOut";
             public const string ServerBusy = "ServerBusy";
+            public const string ContainerAlreadyExists = "ContainerAlreadyExists";
+            public const string BlobAlreadyExists = "BlobAlreadyExists";
         }
 
         /// <summary>
@@ -176,6 +189,8 @@ namespace Azure.Storage
             public const int HttpsPort = 443;
             public const string UriSubDomain = "blob";
             public const int QuickQueryDownloadSize = 4 * Constants.MB;
+            public const string MetadataHeaderPrefix = "x-ms-meta-";
+            public const string ObjectReplicationRulesHeaderPrefix = "x-ms-or-";
 
             internal static class Append
             {
@@ -327,6 +342,8 @@ namespace Azure.Storage
             public const string IsDirectoryKey = "hdi_isFolder";
 
             public const string FileSystemName = "FileSystem";
+
+            public const string DeletionId = "deletionid";
         }
 
         /// <summary>
@@ -601,6 +618,12 @@ namespace Azure.Storage
         {
             internal const int NotFound = 404;
             internal const int NotModified = 304;
+        }
+
+        internal static class ServerTimeout
+        {
+            internal const string HttpMessagePropertyKey = "Azure.Storage.StorageServerTimeoutPolicy.Timeout";
+            internal const string QueryParameterKey = "timeout";
         }
     }
 }

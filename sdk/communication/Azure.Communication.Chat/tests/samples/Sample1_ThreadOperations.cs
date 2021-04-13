@@ -5,35 +5,33 @@ using System;
 using System.Threading.Tasks;
 using Azure.Communication.Identity;
 using Azure.Core;
-using Azure.Core.TestFramework;
 using NUnit.Framework;
 
 namespace Azure.Communication.Chat.Tests.samples
 {
-    public partial class Sample1_ThreadOperations : SamplesBase<ChatTestEnvironment>
+    public partial class Sample1_ThreadOperations : ChatSampleBase
     {
         // This sample demonstrates the operations that can be performed on a thread: create, get, getThreads, update and delete.
         [Test]
         public async Task CreateGetUpdateDeleteThreadAsync()
         {
             CommunicationIdentityClient communicationIdentityClient = new CommunicationIdentityClient(TestEnvironment.ConnectionString);
-            Response<CommunicationUserIdentifier> threadMember = await communicationIdentityClient.CreateUserAsync();
-            AccessToken communicationUserToken = await communicationIdentityClient.IssueTokenAsync(threadMember.Value, new[] { CommunicationTokenScope.Chat });
+            Response<CommunicationUserIdentifier> threadCreatorIdentifier = await communicationIdentityClient.CreateUserAsync();
+            CommunicationUserIdentifier kimberly = await communicationIdentityClient.CreateUserAsync();
+            AccessToken communicationUserToken = await communicationIdentityClient.GetTokenAsync(threadCreatorIdentifier.Value, new[] { CommunicationTokenScope.Chat });
             string userToken = communicationUserToken.Token;
-            string endpoint = TestEnvironment.ChatApiUrl();
-            string threadCreatorId = threadMember.Value.Id;
+            var endpoint = TestEnvironment.Endpoint;
 
             #region Snippet:Azure_Communication_Chat_Tests_Samples_CreateChatClient
             ChatClient chatClient = new ChatClient(
-                new Uri(endpoint),
+                endpoint,
                 new CommunicationTokenCredential(userToken));
             #endregion Snippet:Azure_Communication_Chat_Tests_Samples_CreateChatClient
 
-            var threadCreator = new CommunicationUserIdentifier(threadCreatorId);
             #region Snippet:Azure_Communication_Chat_Tests_Samples_CreateThread
-            var chatParticipant = new ChatParticipant(threadCreator)
+            var chatParticipant = new ChatParticipant(identifier: kimberly)
             {
-                DisplayName = "UserDisplayName"
+                DisplayName = "Kim"
             };
             CreateChatThreadResult createChatThreadResult = await chatClient.CreateChatThreadAsync(topic: "Hello world!", participants: new[] { chatParticipant });
             string threadId = createChatThreadResult.ChatThread.Id;
@@ -41,20 +39,19 @@ namespace Azure.Communication.Chat.Tests.samples
             #endregion Snippet:Azure_Communication_Chat_Tests_Samples_CreateThread
 
             #region Snippet:Azure_Communication_Chat_Tests_Samples_GetThread
-            ChatThread chatThread = await chatClient.GetChatThreadAsync(threadId);
+            ChatThreadProperties chatThread = await chatThreadClient.GetPropertiesAsync();
             #endregion Snippet:Azure_Communication_Chat_Tests_Samples_GetThread
 
             #region Snippet:Azure_Communication_Chat_Tests_Samples_GetThreads
-            AsyncPageable<ChatThreadInfo> chatThreadsInfo = chatClient.GetChatThreadsInfoAsync();
-            await foreach (ChatThreadInfo chatThreadInfo in chatThreadsInfo)
+            AsyncPageable<ChatThreadItem> chatThreadItems = chatClient.GetChatThreadsAsync();
+            await foreach (ChatThreadItem chatThreadItem in chatThreadItems)
             {
-                Console.WriteLine($"{ chatThreadInfo.Id}");
+                Console.WriteLine($"{ chatThreadItem.Id}");
             }
             #endregion Snippet:Azure_Communication_Chat_Tests_Samples_GetThreads
 
             #region Snippet:Azure_Communication_Chat_Tests_Samples_UpdateThread
-            var topic = "new topic";
-            await chatThreadClient.UpdateTopicAsync(topic);
+            await chatThreadClient.UpdateTopicAsync(topic: "new topic !");
             #endregion Snippet:Azure_Communication_Chat_Tests_Samples_UpdateThread
 
             #region Snippet:Azure_Communication_Chat_Tests_Samples_DeleteThread

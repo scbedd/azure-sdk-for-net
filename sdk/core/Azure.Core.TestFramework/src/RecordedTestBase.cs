@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using Castle.DynamicProxy;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
@@ -144,6 +143,13 @@ namespace Azure.Core.TestFramework
             {
                 throw new IgnoreException((string) test.Properties.Get("SkipRecordings"));
             }
+
+            if (Mode == RecordedTestMode.Live &&
+                test.Properties.ContainsKey("SkipLive"))
+            {
+                throw new IgnoreException((string) test.Properties.Get("SkipLive"));
+            }
+
             Recording = new TestRecording(Mode, GetSessionFilePath(), Sanitizer, Matcher);
             ValidateClientInstrumentation = Recording.HasRequests;
         }
@@ -169,6 +175,21 @@ namespace Azure.Core.TestFramework
         {
             ValidateClientInstrumentation = false;
             return base.InstrumentClient(clientType, client, preInterceptors);
+        }
+
+        protected internal T InstrumentOperation<T>(T operation) where T: Operation
+        {
+            return (T) InstrumentOperation(typeof(T), operation);
+        }
+
+        protected internal override object InstrumentOperation(Type operationType, object operation)
+        {
+            return ProxyGenerator.CreateClassProxyWithTarget(
+                operationType,
+                new[] {typeof(IInstrumented)},
+                operation,
+                new GetOriginalInterceptor(operation),
+                new OperationInterceptor(Mode == RecordedTestMode.Playback));
         }
     }
 }

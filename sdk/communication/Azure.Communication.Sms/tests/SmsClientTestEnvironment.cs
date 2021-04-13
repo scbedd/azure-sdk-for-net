@@ -1,17 +1,19 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using Azure.Communication.Pipeline;
-using Azure.Core.TestFramework;
+using Azure.Communication.Tests;
 
 namespace Azure.Communication.Sms.Tests
 {
-    public class SmsClientTestEnvironment : TestEnvironment
+    public class SmsClientTestEnvironment : CommunicationTestEnvironment
     {
-        public string ConnectionString => GetRecordedVariable(CommunicationRecordedTestSanitizer.ConnectionStringEnvironmentVariableName);
+        // please find the allowed package value in tests.yml
+        private const string SmsTestPackagesEnabled = "sms";
 
-        internal const string PhoneNumberEnvironmentVariableName = "AZURE_PHONE_NUMBER";
+        public override string ExpectedTestPackagesEnabled { get { return SmsTestPackagesEnabled; } }
 
-        public string PhoneNumber => GetRecordedVariable(PhoneNumberEnvironmentVariableName);
+        public string ToPhoneNumber => GetRecordedVariable(AzurePhoneNumber);
+
+        public string FromPhoneNumber => GetRecordedVariable(AzurePhoneNumber);
     }
 }

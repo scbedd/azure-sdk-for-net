@@ -7,11 +7,12 @@
 
 using System;
 using System.Text.Json;
+using Azure.AI.TextAnalytics;
 using Azure.Core;
 
-namespace Azure.AI.TextAnalytics
+namespace Azure.AI.TextAnalytics.Models
 {
-    public partial class TasksStateTasksDetails
+    internal partial class TasksStateTasksDetails
     {
         internal static TasksStateTasksDetails DeserializeTasksStateTasksDetails(JsonElement element)
         {

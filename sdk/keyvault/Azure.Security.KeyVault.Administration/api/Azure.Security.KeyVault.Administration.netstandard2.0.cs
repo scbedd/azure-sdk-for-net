@@ -2,6 +2,7 @@ namespace Azure.Security.KeyVault.Administration
 {
     public partial class BackupOperation : Azure.Operation<Azure.Security.KeyVault.Administration.BackupResult>
     {
+        protected BackupOperation() { }
         public BackupOperation(Azure.Security.KeyVault.Administration.KeyVaultBackupClient client, string id) { }
         public System.DateTimeOffset? EndTime { get { throw null; } }
         public override bool HasCompleted { get { throw null; } }
@@ -47,11 +48,11 @@ namespace Azure.Security.KeyVault.Administration
     }
     public partial class KeyVaultAdministrationClientOptions : Azure.Core.ClientOptions
     {
-        public KeyVaultAdministrationClientOptions(Azure.Security.KeyVault.Administration.KeyVaultAdministrationClientOptions.ServiceVersion version = Azure.Security.KeyVault.Administration.KeyVaultAdministrationClientOptions.ServiceVersion.V7_2_Preview) { }
+        public KeyVaultAdministrationClientOptions(Azure.Security.KeyVault.Administration.KeyVaultAdministrationClientOptions.ServiceVersion version = Azure.Security.KeyVault.Administration.KeyVaultAdministrationClientOptions.ServiceVersion.V7_2) { }
         public Azure.Security.KeyVault.Administration.KeyVaultAdministrationClientOptions.ServiceVersion Version { get { throw null; } }
         public enum ServiceVersion
         {
-            V7_2_Preview = 1,
+            V7_2 = 1,
         }
     }
     public static partial class KeyVaultAdministrationModelFactory
@@ -114,6 +115,7 @@ namespace Azure.Security.KeyVault.Administration
     }
     public partial class RestoreOperation : Azure.Operation<Azure.Security.KeyVault.Administration.RestoreResult>
     {
+        protected RestoreOperation() { }
         public RestoreOperation(Azure.Security.KeyVault.Administration.KeyVaultBackupClient client, string id) { }
         public System.DateTimeOffset? EndTime { get { throw null; } }
         public override bool HasCompleted { get { throw null; } }
@@ -135,6 +137,7 @@ namespace Azure.Security.KeyVault.Administration
     }
     public partial class SelectiveKeyRestoreOperation : Azure.Operation<Azure.Security.KeyVault.Administration.SelectiveKeyRestoreResult>
     {
+        protected SelectiveKeyRestoreOperation() { }
         public SelectiveKeyRestoreOperation(Azure.Security.KeyVault.Administration.KeyVaultBackupClient client, string id) { }
         public System.DateTimeOffset? EndTime { get { throw null; } }
         public override bool HasCompleted { get { throw null; } }

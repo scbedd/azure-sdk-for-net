@@ -6,11 +6,12 @@
 #nullable disable
 
 using System;
+using Azure.AI.TextAnalytics;
 
-namespace Azure.AI.TextAnalytics
+namespace Azure.AI.TextAnalytics.Models
 {
     /// <summary> The TaskState. </summary>
-    public partial class TaskState
+    internal partial class TaskState
     {
         /// <summary> Initializes a new instance of TaskState. </summary>
         /// <param name="lastUpdateDateTime"> . </param>
@@ -20,5 +21,20 @@ namespace Azure.AI.TextAnalytics
             LastUpdateDateTime = lastUpdateDateTime;
             Status = status;
         }
+
+        /// <summary> Initializes a new instance of TaskState. </summary>
+        /// <param name="lastUpdateDateTime"> . </param>
+        /// <param name="name"> . </param>
+        /// <param name="status"> . </param>
+        internal TaskState(DateTimeOffset lastUpdateDateTime, string name, TextAnalyticsOperationStatus status)
+        {
+            LastUpdateDateTime = lastUpdateDateTime;
+            Name = name;
+            Status = status;
+        }
+
+        public DateTimeOffset LastUpdateDateTime { get; }
+        public string Name { get; }
+        public TextAnalyticsOperationStatus Status { get; }
     }
 }

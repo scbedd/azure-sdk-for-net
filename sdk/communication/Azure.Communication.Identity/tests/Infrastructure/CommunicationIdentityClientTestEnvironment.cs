@@ -1,16 +1,14 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using System;
-using Azure.Communication.Pipeline;
-using Azure.Core.TestFramework;
+using Azure.Communication.Tests;
 
 namespace Azure.Communication.Identity.Tests
 {
-    public class CommunicationIdentityClientTestEnvironment: TestEnvironment
+    public class CommunicationIdentityClientTestEnvironment : CommunicationTestEnvironment
     {
-        public string ConnectionString => GetRecordedVariable(CommunicationRecordedTestSanitizer.ConnectionStringEnvironmentVariableName);
-        public Uri Endpoint => new Uri(GetRecordedVariable(CommunicationRecordedTestSanitizer.EndpointEnvironmentVariableName));
-        public string AccessKey => GetRecordedVariable(CommunicationRecordedTestSanitizer.AccessKeyEnvironmentVariableName);
+        // please find the allowed package value in tests.yml
+        private const string IdentityTestPackagesEnabled = "identity";
+        public override string ExpectedTestPackagesEnabled { get { return IdentityTestPackagesEnabled; } }
     }
 }

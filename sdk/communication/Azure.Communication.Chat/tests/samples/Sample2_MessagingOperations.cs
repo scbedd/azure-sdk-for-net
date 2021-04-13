@@ -5,12 +5,11 @@ using System;
 using System.Threading.Tasks;
 using Azure.Communication.Identity;
 using Azure.Core;
-using Azure.Core.TestFramework;
 using NUnit.Framework;
 
 namespace Azure.Communication.Chat.Tests.samples
 {
-    public partial class Sample2_MessagingOperations : SamplesBase<ChatTestEnvironment>
+    public partial class Sample2_MessagingOperations : ChatSampleBase
     {
         // This sample demonstrates the messaging operations that can be performed on a thread: send, get, update, delete, typing notifications and readreceipts
         [Test]
@@ -18,28 +17,25 @@ namespace Azure.Communication.Chat.Tests.samples
         {
             CommunicationIdentityClient communicationIdentityClient = new CommunicationIdentityClient(TestEnvironment.ConnectionString);
             Response<CommunicationUserIdentifier> threadMember = await communicationIdentityClient.CreateUserAsync();
-            AccessToken communicationUserToken = await communicationIdentityClient.IssueTokenAsync(threadMember.Value, new[] { CommunicationTokenScope.Chat });
+            AccessToken communicationUserToken = await communicationIdentityClient.GetTokenAsync(threadMember.Value, new[] { CommunicationTokenScope.Chat });
             string userToken = communicationUserToken.Token;
-            string endpoint = TestEnvironment.ChatApiUrl();
             string theadCreatorMemberId = threadMember.Value.Id;
 
             ChatClient chatClient = new ChatClient(
-                new Uri(endpoint),
+                TestEnvironment.Endpoint,
                 new CommunicationTokenCredential(userToken));
 
             var chatParticipant = new ChatParticipant(new CommunicationUserIdentifier(theadCreatorMemberId))
             {
                 DisplayName = "UserDisplayName",
-                ShareHistoryTime = DateTime.MinValue
+                ShareHistoryTime = DateTimeOffset.MinValue
             };
             CreateChatThreadResult createChatThreadResult = await chatClient.CreateChatThreadAsync(topic: "Hello world!", participants: new[] { chatParticipant });
             ChatThreadClient chatThreadClient = chatClient.GetChatThreadClient(createChatThreadResult.ChatThread.Id);
 
             #region Snippet:Azure_Communication_Chat_Tests_Samples_SendMessage
-            var content = "hello world";
-            var type = ChatMessageType.Html;
-            var senderDisplayName = "sender name";
-            var messageId = await chatThreadClient.SendMessageAsync(content, type, senderDisplayName);
+            SendChatMessageResult sendChatMessageResult = await chatThreadClient.SendMessageAsync(content:"hello world");
+            var messageId = sendChatMessageResult.Id;
             #endregion Snippet:Azure_Communication_Chat_Tests_SendMessage
 
             #region Snippet:Azure_Communication_Chat_Tests_Samples_GetMessage
@@ -50,7 +46,7 @@ namespace Azure.Communication.Chat.Tests.samples
             AsyncPageable<ChatMessage> allMessages = chatThreadClient.GetMessagesAsync();
             await foreach (ChatMessage message in allMessages)
             {
-                Console.WriteLine($"{message.Id}:{message.Content}");
+                Console.WriteLine($"{message.Id}:{message.Content.Message}");
             }
             #endregion Snippet:Azure_Communication_Chat_Tests_Samples_GetMessages
 
