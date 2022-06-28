@@ -5,7 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Azure.Core;
@@ -14,13 +16,14 @@ using NUnit.Framework;
 
 namespace Azure.Security.ConfidentialLedger.Tests
 {
-    [LiveOnly]
     public class ConfidentialLedgerClientLiveTests : RecordedTestBase<ConfidentialLedgerEnvironment>
     {
         private TokenCredential Credential;
         private readonly ConfidentialLedgerClientOptions _options = new ConfidentialLedgerClientOptions();
         private ConfidentialLedgerClient Client;
         private ConfidentialLedgerIdentityServiceClient IdentityClient;
+        private X509Certificate2 ServiceCert;
+        private string ServiceCertPem;
         private HashSet<string> TestsNotRequiringLedgerEntry = new() { "GetEnclaveQuotes", "GetConsortiumMembers", "GetConstitution" };
 
         public ConfidentialLedgerClientLiveTests(bool isAsync) : base(isAsync)
@@ -37,7 +40,15 @@ namespace Azure.Security.ConfidentialLedger.Tests
                     TestEnvironment.ConfidentialLedgerIdentityUrl,
                     _options);
 
-            var serviceCert = ConfidentialLedgerClient.GetIdentityServerTlsCert(TestEnvironment.ConfidentialLedgerUrl, _options, IdentityClient);
+            ServiceCert = ConfidentialLedgerClient.GetIdentityServerTlsCert(TestEnvironment.ConfidentialLedgerUrl, _options, IdentityClient);
+
+            var ledgerId = TestEnvironment.ConfidentialLedgerUrl.Host.Substring(0, TestEnvironment.ConfidentialLedgerUrl.Host.IndexOf('.'));
+            var serviceClient = new ConfidentialLedgerIdentityServiceClient(new Uri("https://identity.confidential-ledger.core.azure.com"));
+            Response response = serviceClient.GetLedgerIdentity(ledgerId, new());
+            ServiceCertPem = JsonDocument.Parse(response.Content)
+                .RootElement
+                .GetProperty("ledgerTlsCertificate")
+                .GetString();
 
             Client = InstrumentClient(
                 new ConfidentialLedgerClient(
@@ -45,7 +56,7 @@ namespace Azure.Security.ConfidentialLedger.Tests
                     Credential,
                     clientCertificate: null,
                     options: InstrumentClientOptions(_options),
-                    serviceCert));
+                    ServiceCert));
         }
 
         public async Task GetUser(string objId)
@@ -57,17 +68,58 @@ namespace Azure.Security.ConfidentialLedger.Tests
             Assert.That(stringResult, Does.Contain(objId));
         }
 
+        public async Task PostRecordingIdTransport(string recordingId, string ledgerCert, string pemValue, string pemKey)
+        {
+            try
+            {
+                var url = "http://localhost:5000/Admin/SetRecordingOptions";
+                HttpClient client = new HttpClient();
+
+                var upstreamRequest = new HttpRequestMessage();
+                upstreamRequest.RequestUri = new Uri(url);
+                upstreamRequest.Method = HttpMethod.Post;
+                upstreamRequest.Headers.Add("x-recording-id", recordingId);
+
+                var json = string.Format("{{ \"Transport\": {{\"TLSValidationCert\": \"{0}\", \"Certificates\": [ {{ \"PemValue\": \"{1}\", \"PemKey\": \"{2}\" }} ]}}}}",
+                    ledgerCert.Replace("\n", ""),
+                    pemValue.Replace(Environment.NewLine, ""),
+                    pemKey.Replace(Environment.NewLine, "")
+                );
+
+                byte[] byteArray = Encoding.UTF8.GetBytes(json);
+                upstreamRequest.Content = new StringContent(json,
+                                                    Encoding.UTF8,
+                                                    "application/json");
+
+                var result = await client.SendAsync(upstreamRequest);
+
+                if (result.StatusCode != HttpStatusCode.OK)
+                {
+                    throw new Exception("We didn't successfully post certificate info.");
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
 #if NET6_0_OR_GREATER
         [RecordedTest]
         public async Task AuthWithClientCert()
         {
             var _cert = X509Certificate2.CreateFromPem(TestEnvironment.ClientPEM, TestEnvironment.ClientPEMPk);
             _cert = new X509Certificate2(_cert.Export(X509ContentType.Pfx));
+
+            await PostRecordingIdTransport(this.Recording.RecordingId, ServiceCertPem, TestEnvironment.ClientPEM, TestEnvironment.ClientPEMPk);
+
             var certClient = InstrumentClient(new ConfidentialLedgerClient(
                 TestEnvironment.ConfidentialLedgerUrl,
                 credential: null,
                 clientCertificate: _cert,
-                options: InstrumentClientOptions(_options)));
+                options: InstrumentClientOptions(_options),
+                identityServiceCert: ServiceCert));
             var result = await certClient.GetConstitutionAsync(new());
             var stringResult = new StreamReader(result.ContentStream).ReadToEnd();
 
