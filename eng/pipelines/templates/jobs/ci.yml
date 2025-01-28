@@ -144,8 +144,9 @@ jobs:
       - ${{ else }}:
         - pwsh: |
             if (Test-Path "$(ProjectListOverrideFile)") {
+              Write-Host "Clearing $(ProjectListOverrideFile)"
               rm "$(ProjectListOverrideFile)"
-              Write-Host "##vso[task.setvariable variable=ProjectListOverrideFile] "
+              Write-Host "##vso[task.setvariable variable=ProjectListOverrideFile;]"
             }
           displayName: Cleanup Props File
 
@@ -159,6 +160,7 @@ jobs:
             /p:Configuration=$(BuildConfiguration)
             /p:CommitSHA=$(Build.SourceVersion)
             /p:ArtifactsPackagesDir=$(Build.ArtifactStagingDirectory)
+            /p:ProjectListOverrideFile=$(ProjectListOverrideFile)
             $(DiagnosticArguments)
           displayName: "Build and Package"
 
