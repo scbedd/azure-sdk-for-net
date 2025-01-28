@@ -141,6 +141,12 @@ jobs:
             }
           displayName: "Build and Package"
       - ${{ else }}:
+        - pwsh: |
+            if (Test-Path "$(ProjectListOverrideFile)") {
+              rm "$(ProjectListOverrideFile)"
+            }
+          displayName: Clean Props file?
+
         - script: >-
             dotnet pack eng/service.proj -warnaserror
             /p:ValidateRunApiCompat=true
