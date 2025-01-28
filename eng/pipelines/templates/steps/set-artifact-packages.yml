@@ -39,6 +39,8 @@ steps:
     displayName: Resolve Targeted Packages
     condition: eq(variables['ProjectNames'], '')
 
+  # this script sets $(ChangedServices) and populates a props file with the targeted set of projects
+  # for the build. This file is set to variable $(ProjectListOverrideFile).
   - pwsh: |
       ./eng/scripts/splittestdependencies/set-artifact-packages.ps1 `
         -ProjectNames "$(ProjectNames)" `

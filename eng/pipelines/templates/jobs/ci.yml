@@ -85,6 +85,7 @@ jobs:
 
       - template: /eng/common/pipelines/templates/steps/daily-dev-build-variable.yml
 
+      # need this call to run without honoring the dev versioning variable to start with
       - template: /eng/common/pipelines/templates/steps/save-package-properties.yml
         parameters:
           ServiceDirectory: ${{ parameters.ServiceDirectory }}
@@ -159,6 +160,8 @@ jobs:
             /p:ArtifactsPackagesDir=$(Build.ArtifactStagingDirectory)
             $(DiagnosticArguments)
           displayName: "Build and Package"
+          env:
+            ProjectListOverrideFile: ''
 
       - task: Powershell@2
         inputs:
