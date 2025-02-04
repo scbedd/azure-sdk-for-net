@@ -170,6 +170,7 @@ jobs:
           /p:CollectCoverage=$(CollectCoverage)
           /p:EnableSourceLink=false
           /p:ProjectListOverrideFile=$(ProjectListOverrideFile)
+          /p:EnableOverrideExclusions=true
           $(AdditionalTestArguments)
           $(DiagnosticArguments)
         displayName: "Build & Test ($(TestTargetFramework))"
