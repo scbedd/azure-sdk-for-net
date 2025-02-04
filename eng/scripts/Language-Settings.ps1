@@ -76,22 +76,13 @@ function Get-AllPackageInfoFromRepo($serviceDirectory)
       $outputFilePath = Join-Path $RepoRoot "$($pkgProp.Name)_dependencylist.txt"
 
       if (!(Test-Path $outputFilePath)) {
-        Write-Host "        dotnet build /t:ProjectDependsOn ./eng/service.proj
-          /p:TestDependsOnDependency=`"$($pkgProp.Name)`"
-          /p:IncludeSrc=false /p:IncludeStress=false /p:IncludeSamples=false
-          /p:IncludePerf=false /p:RunApiCompat=false
-          /p:InheritDocEnabled=false /p:BuildProjectReferences=false
-          /p:OutputProjectFilePath=`"$outputFilePath`""
-
         try {
-          Invoke-LoggedCommand {
-            dotnet build /t:ProjectDependsOn ./eng/service.proj `
-              /p:TestDependsOnDependency="$($pkgProp.Name)" `
+          Invoke-LoggedCommand "dotnet build /t:ProjectDependsOn ./eng/service.proj `
+              /p:TestDependsOnDependency=`"$($pkgProp.Name)`" `
               /p:IncludeSrc=false /p:IncludeStress=false /p:IncludeSamples=false  `
               /p:IncludePerf=false /p:RunApiCompat=false `
               /p:InheritDocEnabled=false /p:BuildProjectReferences=false `
-              /p:OutputProjectFilePath="$outputFilePath"
-          }
+              /p:OutputProjectFilePath=`"$outputFilePath`""
         }
         catch {
             Write-Host "Failed calculating dependencies for $($pkgProp.Name), continuing."
