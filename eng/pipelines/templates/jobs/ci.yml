@@ -411,11 +411,6 @@ jobs:
                   | Copy-Item -Destination "$(Build.ArtifactStagingDirectory)/PackageInfo/$($_.Name)" -Force
               displayName: Copy ArtifactInfo from Publishing Directory
 
-            - pwsh: |
-                Get-ChildItem -R $(Build.ArtifactStagingDirectory)/PackageInfoPublishing | ForEach-Object {  $content = Get-Content $_.FullName; Write-Host "$($_.FullName): `n$content" }
-                Get-ChildItem -R $(Build.ArtifactStagingDirectory)/PackageInfo | ForEach-Object {  $content = Get-Content $_.FullName; Write-Host "$($_.FullName): `n$content" }
-              displayName: Dump Available Artifacts
-
             - template: /eng/common/pipelines/templates/steps/publish-1es-artifact.yml
               parameters:
                 ArtifactName: 'TestPackagesArtifact'

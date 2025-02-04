@@ -120,10 +120,6 @@ jobs:
         - ${{ each pair in step }}:
             ${{ pair.key }}: ${{ pair.value }}
 
-      - pwsh: |
-          Get-ChildItem -Path $(Build.SourcesDirectory) | ForEach-Object { Write-Host $_.FullName }
-        displayName: Dump Visible Files
-
       # this section is only included when invoking with a dynamic set of packages (EG net - pullrequest)
       - ${{ if and(eq(variables['Build.Reason'], 'PullRequest'), eq(parameters.ServiceDirectory, 'auto')) }}:
         - template: /eng/pipelines/templates/steps/set-artifact-packages.yml
@@ -150,10 +146,8 @@ jobs:
           }
           else
           {
-            # if not ProjectListOverrideFile is not set, we aren't running in net - pullrequest, so we need to default the ProjectListOverrideFile to be defined
-            if (!$env:PROJECTLISTOVERRIDEFILE) {
-              Write-Host "##vso[task.setvariable variable=ProjectListOverrideFile] "
-            }
+            # we aren't running in net - pullrequest, so we need to ensure the value is set to empty string
+            Write-Host "##vso[task.setvariable variable=ProjectListOverrideFile]"
             Write-Host "##vso[task.setvariable variable=CodeCoverageFilePattern]$(Build.SourcesDirectory)/sdk/$(ServiceDirectory)/**/coverage.cobertura.xml"
           }
         displayName: Set variable for the project list file and coverage directory
