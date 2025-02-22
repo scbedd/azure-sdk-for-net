@@ -422,7 +422,9 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <TestProxyVersion>1.0.0-dev.20241213.1</TestProxyVersion>
+    <TestProxyVersionFile>common/testproxy/target_version.txt</TestProxyVersionFile>
+    <_RawTestProxyVersion>$([System.IO.File]::ReadAllText($(TestProxyVersionFile)))</_RawTestProxyVersion>
+    <TestProxyVersion>$([System.String]::Copy($(_RawTestProxyVersion)).Trim())</TestProxyVersion>
   </PropertyGroup>
 
 </Project>
